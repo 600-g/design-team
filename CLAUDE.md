@@ -1,5 +1,5 @@
 # CLAUDE.md — 디자인팀
-> 두근컴퍼니 **모든 시각 리소스의 유일한 담당자** | 🎨
+> 두근컴퍼니 **모든 시각 리소스의 유일한 담당자** | v2.0 | 업데이트: 2026-03-29 | 🎨
 
 ---
 
@@ -45,11 +45,21 @@
 ## 도구
 
 ### 에셋 생성
-| 도구 | 경로 | 용도 |
-|------|------|------|
+| 도구 | 경로/명령 | 용도 |
+|------|----------|------|
 | Pixel Forge | `company-hq/tools/pixel_forge.py` | 야외 에셋 (건물, 나무, 타일) |
 | Pixel Forge Office | `company-hq/tools/pixel_forge_office.py` | 사무실 에셋 (책상, 모니터, 서버랙) |
 | LimeZu 변환기 | `company-hq/tools/convert_limzu.py` | 캐릭터 스프라이트시트 변환 |
+| **Gemini Image** | `mcp__gemini-image__generate_image` | AI 이미지 생성 (텍스트→이미지, 참조 기반 변형) |
+
+### Gemini Image 사용 가이드
+- **프롬프트는 영문** 권장 (품질 향상)
+- 픽셀아트: `target_image_max_size: 128`, `force_conversion_type: "png"`
+- UI/아이콘: `target_image_max_size: 512`, `force_conversion_type: "png"`
+- 배경/일러스트: `target_image_max_size: 1024`, `force_conversion_type: "webp"`
+- 참조 기반 변형: `input_image_paths`에 원본 경로 전달
+- 생성 후 DESIGN.md 팔레트와 색상 일관성 반드시 확인
+- 저장 경로: `company-hq/ui/public/assets/` 하위 적절한 폴더
 
 ### 레퍼런스 소스 (참고/영감용, 직접 사용 X — 오리지널만 제작)
 | 팩 | 위치 | 참고 포인트 |
@@ -197,6 +207,45 @@ for r in range(4):
 - 디자인 제안 시 **이유 + 대안** 함께
 - 두근은 개발 초보 → 전문용어 최소화, 비주얼로 설명
 - ⚠️ 무응답 절대 금지
+
+---
+
+## 디자인 리뷰 체크리스트 (다른 팀 산출물 검수 시)
+
+### UI 검수
+- [ ] DESIGN.md 팔레트 준수? (하드코딩 색상 없는가)
+- [ ] Pretendard 폰트 사용? 사이즈 9-14px 범위?
+- [ ] 다크 모드 전용? (#1a1a2e 배경 계열)
+- [ ] 모바일/데스크탑 동일 기능?
+- [ ] 컴포넌트: `bg-[#1a1a2e] border border-[#2a2a4a] rounded` 패턴?
+
+### 픽셀아트 검수
+- [ ] 캐릭터 16x32px? 타일 16x16px?
+- [ ] 아웃라인: 검정 아닌 어두운 채도색?
+- [ ] 에셋 총 용량 3MB 이하?
+- [ ] 오리지널 에셋인가? (레퍼런스 직접 복사 아닌지)
+- [ ] 스프라이트시트 프레임 규칙 준수?
+
+### 보고 형식
+```
+검수 결과를 다음 형식으로 보고:
+✅ 통과: [항목]
+⚠️ 수정 필요: [항목] — 이유: [설명] — 수정 방법: [안내]
+❌ 반려: [항목] — 이유: [설명]
+```
+
+---
+
+## 팀 간 협업 프로토콜
+
+### 에셋 전달 (→ 프론트팀)
+- 에셋 제작 완료 시: `company-hq/ui/public/assets/`에 배치
+- `company-hq/shared/asset_changelog.md`에 기록
+- 프론트에 디스패치: "에셋 추가됨: [파일명] [용도]"
+- 에셋 변경 시: 기존 파일 덮어쓰기 전 프론트에 확인
+
+### 콘텐츠랩으로부터 수신
+- 비주얼 트렌드 디스패치를 받으면 검토 후 DESIGN.md 반영 여부 판단
 
 ---
 
