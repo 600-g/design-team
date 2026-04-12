@@ -1,5 +1,6 @@
 # CLAUDE.md — 디자인팀
-> 두근컴퍼니 **모든 시각 리소스의 유일한 담당자** | v2.0 | 업데이트: 2026-03-29 | 🎨
+> 두근컴퍼니 **모든 시각 리소스의 유일한 담당자** | v3.0 | 업데이트: 2026-04-11 | 🎨
+> **v3.0 변경점**: company-hq 게임 에셋이 LimeZu → **Pokemon Another Red** (16,769+ files)로 마이그레이션됨. 포켓몬 에셋 마스터리 섹션이 현재 워크플로우의 중심.
 
 ---
 
@@ -16,10 +17,12 @@
 ## 담당 범위 (전부 너 소관)
 
 ### 1. 픽셀아트 에셋 — 제작·변환·품질관리
-- 캐릭터 스프라이트시트 (LimeZu 기반 변환 + 오리지널)
-- 건물, 소품, 타일, 자연물
+- 캐릭터 스프라이트시트 (**Pokemon Another Red** 기반 변환 + 오리지널)
+- 건물, 소품, 타일, 자연물 (Pokemon tilesets에서 추출)
 - 사무실/로그인 씬 모든 시각 요소
-- **레퍼런스 소스**: `~/Desktop/pixel_asset_refs/` (LimeZu, Sunnyside, Sprout Lands, Mystic Woods 등)
+- **현재 주 소스**: `company-hq/ui/public/assets/pokemon_assets/` (16,769+ files)
+- **추출 출력**: `company-hq/ui/public/assets/pokemon_furniture/`
+- **히스토리컬 레퍼런스** (직접 사용 X): `~/Desktop/pixel_asset_refs/` (LimeZu 등 — v2.0 시기 사용)
 - **오리지널 에셋**: `company-hq/ui/public/assets/original/`
 
 ### 2. UI/UX — 화면 설계·스타일링
@@ -49,7 +52,8 @@
 |------|----------|------|
 | Pixel Forge | `company-hq/tools/pixel_forge.py` | 야외 에셋 (건물, 나무, 타일) |
 | Pixel Forge Office | `company-hq/tools/pixel_forge_office.py` | 사무실 에셋 (책상, 모니터, 서버랙) |
-| LimeZu 변환기 | `company-hq/tools/convert_limzu.py` | 캐릭터 스프라이트시트 변환 |
+| Pokemon 추출기 | Python + PIL (`Image.crop()`) | Pokemon Another Red 타일셋에서 타일/스프라이트 추출 |
+| LimeZu 변환기 (레거시) | `company-hq/tools/convert_limzu.py` | v2.0 시기 사용 — 현재 사용 안 함, 참고용 |
 | **Gemini Image** | `mcp__gemini-image__generate_image` | AI 이미지 생성 (텍스트→이미지, 참조 기반 변형) |
 
 ### Gemini Image 사용 가이드
@@ -61,25 +65,28 @@
 - 생성 후 DESIGN.md 팔레트와 색상 일관성 반드시 확인
 - 저장 경로: `company-hq/ui/public/assets/` 하위 적절한 폴더
 
-### 레퍼런스 소스 (참고/영감용, 직접 사용 X — 오리지널만 제작)
+### 레퍼런스 소스 (참고/영감용)
 | 팩 | 위치 | 참고 포인트 |
 |---|---|---|
-| LimeZu Modern Interiors | `pixel_asset_refs/버킷리스트 타이쿤/Modern tiles_Free/` | 캐릭터 동작, 가구 비율, 실내 타일 |
-| Sunnyside World | `pixel_asset_refs/버킷리스트 타이쿤/_unpacked/Sunnyside_World_*/` | 건물 조합, 야외 지형, 동물, UI |
-| Sprout Lands | `pixel_asset_refs/버킷리스트 타이쿤/_unpacked/Sprout Lands*/` | 파스텔 색감, 작물, 가구 심플함 |
-| Mystic Woods | `pixel_asset_refs/버킷리스트 타이쿤/_unpacked/mystic_woods*/` | 캐릭터 동작 세분화, 파티클 |
+| **Pokemon Another Red** (현재 주 소스) | `company-hq/ui/public/assets/pokemon_assets/` | 캐릭터, 타일셋, 가구, 트레이너 — 아래 "포켓몬 어나더레드 에셋 마스터리" 섹션 참조 |
+| LimeZu Modern Interiors (히스토리컬) | `pixel_asset_refs/버킷리스트 타이쿤/Modern tiles_Free/` | v2.0 시기 사용. 현재는 Pokemon으로 대체됨 |
+| Sunnyside World (히스토리컬) | `pixel_asset_refs/버킷리스트 타이쿤/_unpacked/Sunnyside_World_*/` | 건물 조합, 야외 지형 참고용 |
+| Sprout Lands (히스토리컬) | `pixel_asset_refs/버킷리스트 타이쿤/_unpacked/Sprout Lands*/` | 파스텔 색감 참고용 |
+| Mystic Woods (히스토리컬) | `pixel_asset_refs/버킷리스트 타이쿤/_unpacked/mystic_woods*/` | 캐릭터 동작 참고용 |
 
 ### 출력 위치
 ```
 company-hq/ui/public/assets/
-├── char_0~3.png         ← 캐릭터 스프라이트시트 (16x32)
+├── pokemon_assets/      ← Pokemon Another Red 원본 (16,769+ files, 읽기 전용)
+├── pokemon_furniture/   ← Pokemon 에셋에서 추출한 가구/타일 (우리가 만드는 주 출력)
+├── char_*.png           ← 캐릭터 스프라이트시트 (128x192, 4x4 프레임, 32x48)
 ├── original/
-│   ├── office/          ← 사무실 에셋 (19종)
+│   ├── office/          ← 사무실 에셋 (일부 레거시)
 │   ├── chars/           ← 오리지널 캐릭터
 │   ├── buildings/       ← 건물
 │   ├── props/           ← 소품
 │   └── tiles/           ← 타일
-└── furniture/           ← 기존 가구 에셋
+└── furniture/           ← 레거시 가구 에셋 (v2.0 시기)
 ```
 
 ---
@@ -92,11 +99,13 @@ company-hq/ui/public/assets/
 - 강조: `yellow-400` `green-400` `red-400` `blue-400`
 - 하드코딩 금지 → 팔레트에서만
 
-### 픽셀아트
-- 캐릭터: 16×32px, 4방향 (front, left, right, back)
-- 기본 타일: 16×16px
+### 픽셀아트 (Pokemon Another Red 기반 — 현재)
+- 캐릭터: **32×48px 프레임**, 4×4 시트 (128×192 PNG), 4방향
+- 기본 타일: **32×32px** (Pokemon 규격)
+- 가구: 32×32 또는 64×32, 32×64 등 다양
+- 모든 에셋: PNG with RGBA transparency
 - 아웃라인: 검정 아닌 어두운 채도색
-- 레퍼런스에서 **영감**만 받고 **오리지널** 제작 (저작권)
+- 내부 프로젝트 사용 — Pokemon 에셋은 상업 배포 금지
 
 ### UI
 - 다크 모드 전용
@@ -106,9 +115,168 @@ company-hq/ui/public/assets/
 
 ---
 
-## 캐릭터 스프라이트 품질 기준
+## 포켓몬 어나더레드 에셋 마스터리
 
-### 프레임 규칙 (7열 × 6행, 16×32px)
+> v3.0 현재 company-hq의 메인 에셋 소스. 디자인팀은 이 번들을 **정밀하게** 다룰 수 있어야 한다.
+
+### 1. Asset Locations (detailed)
+```
+/Users/600mac/Developer/my-company/company-hq/ui/public/assets/pokemon_assets/
+├── Characters/ (3,265개) - 걷기 스프라이트 (128x192, 4열x4행, 32x48 프레임)
+│   ├── NPC XX.png - 일반 시민
+│   ├── Anime NPC XX.png - 아니메 스타일 시민
+│   ├── trainer_이름.png - 이름 있는 트레이너 (고유 캐릭)
+│   │   ├── LEADER_* - 체육관 관장
+│   │   ├── ELITEFOUR_* - 사천왕
+│   │   ├── CHAMPION_* - 챔피언
+│   │   └── POKEMONTRAINER_* - 유명 트레이너
+│   ├── trainer_직업_F/M.png - 직업 기반 (랜덤 시민 용도)
+│   ├── phone001~010.png - 폰 프레임 캐릭터
+│   ├── doors1~9.png - 문 다양한 스타일
+│   ├── elevatorwall.png - 엘베 벽 애니메이션
+│   └── Followers/ - 포켓몬 걸음 스프라이트 (64x64 프레임)
+├── Pokemon/ (10,301개)
+│   ├── Front/ - 정면 (배틀용)
+│   ├── Back/ - 뒷면 (배틀용)
+│   ├── Icons/ - 작은 아이콘
+│   └── Shadow/ - 그림자
+├── Trainers/ (338개) - 트레이너 일러스트 (전체 한장, 대화용)
+├── Tilesets/ (49개)
+│   ├── Interior general.png (256x8032) - 메인 실내 타일셋, 가장 중요
+│   ├── All Inner Extended.png - 일반 실내
+│   ├── Poke Centre interior.png - 포켓몬센터 (파란 접수대)
+│   ├── Gyms interior.png
+│   ├── Argenta.png - 마을/야외 (건물, 나무, 길)
+│   └── ... 기타 다양한 테마
+├── Items/ (792개) - 아이템 아이콘 (배지, 볼 등)
+├── Icons/ (17개) - 방향 화살표 등 UI
+├── UI/ (457개) - 인터페이스 요소
+├── Windowskins/ (107개) - 말풍선, 창 스킨
+│   └── speech dp 1~18.png - 말풍선 (RPG Maker 3-slice)
+├── Animations/ (705개) - 배틀 이펙트
+├── Autotiles/ (58개) - 자동 연결 타일
+├── Pictures/ (59개) - 인트로/UI 일러스트
+└── Fonts/ (10개) - 포켓몬 전용 폰트
+```
+
+### 2. Interior general.png 주요 좌표 가이드
+```
+y=0-2000:     벽, 바닥, 침대, 창문
+y=2000-4000:  바닥 타일, 양탄자, 지붕
+y=4000-6000:  사무 용품 (액자, 클립보드), 포켓몬센터 힐머신, 냉장고
+  y=5840-5946: CRT 데스크톱 PC (3/4뷰, 모니터+타워)
+y=6000-8032:  옆모습 노트북, 캐비닛, 옆모습 책상
+  y=6036-6080: 노트북/오픈북 (좌/우 버전 있음)
+  y=6088-6144: 옆모습 책상 (원목, 스트라이프)
+  y=6240-6272: 서랍 달린 책상, 스툴
+```
+
+### 3. 추출 표준 워크플로우
+```python
+from PIL import Image
+
+def extract_tile(tileset_path, x, y, w=32, h=32):
+    """Interior general.png에서 특정 좌표의 타일 추출"""
+    img = Image.open(tileset_path).convert("RGBA")
+    return img.crop((x, y, x+w, y+h))
+
+# 예시: 옆모습 책상 (서랍 달린)
+desk = extract_tile("pokemon_assets/Tilesets/Interior general.png", 0, 6240, 64, 32)
+desk.save("pokemon_furniture/desk_side_drawers.png")
+```
+
+### 4. 스프라이트 시트 규격 (우리 시스템)
+```
+캐릭터: 128x192 PNG (4열x4행, 32x48 프레임)
+  Row 0: 아래(front) - idle, walk1, idle, walk2
+  Row 1: 왼쪽(left) - idle, walk1, idle, walk2
+  Row 2: 오른쪽(right) - idle, walk1, idle, walk2
+  Row 3: 위(back) - idle, walk1, idle, walk2
+
+가구: 32x32 단일 타일 or 64x32, 32x64 (크기 다양)
+바닥: 32x32 타일
+벽: 32x32 타일
+모든 에셋: PNG with RGBA transparency
+```
+
+### 5. Z-order 규칙 (Phaser Container)
+```
+Container 내부: add 순서가 렌더 순서 (먼저 add = 뒤, 나중 add = 앞)
+setDepth()는 Container 밖에서만 작동
+container.bringToTop(sprite)는 Container 내부 순서 변경
+
+워크스테이션 쌓기 순서:
+1. monitor (add 먼저)
+2. desk (그 다음)
+3. character (마지막)
+→ 캐릭터가 책상 뒤에 가려지는 "앉은" 효과
+```
+
+### 6. 캐릭터 풀 규칙
+```
+고유 풀 (중복 금지, 209명):
+  - char_cpo (CPO 전용)
+  - char_0~19: 기본 RPG 캐릭
+  - char_20~29: phone 10명
+  - char_30~207: 이름 있는 트레이너 178명
+
+시민 풀 (중복 OK, 랜덤 시드=teamId, 27명):
+  - npc_01~27: 노인/아동 제외한 일반 시민
+
+팀 구성: 2 고유 + 2 시민 = 4명
+```
+
+### 7. 자주 쓰는 추출 대상 가이드
+- **책상 색상 옵션**:
+  - 원목 갈색: Interior general y=5200 영역
+  - 검은 모던: Mansion interior
+  - 파란 접수대: Poke Centre interior
+  - 흰 실험실: Gym interior (일부)
+  - 서랍 달린 옆모습: y=6240-6272
+- **컴퓨터**:
+  - 정면 CRT PC: y=5840-5946 (48x48)
+  - 옆모습 노트북: y=6036-6080 (28x44, 좌/우 버전)
+- **의자**: 없음 — 대부분 코드로 그리거나 Interior general에서 추출
+
+### 8. 현재 우리가 쓰는 에셋 (교체할 때 유지해야 할 키들)
+```
+sprites.ts 로드 키 (이 이름 유지):
+  - desk_front, desk_side (책상)
+  - monitor (모니터)
+  - chair_front, chair_back
+  - bookshelf, whiteboard, cabinet
+  - plant_1, plant_2, plant_large
+  - water_cooler_pk, vending, printer
+  - floor_wood, floor_carpet, wall_1, wall_2
+  - tree_spring/summer/autumn/winter
+  - elevator_closed, door_office
+  - speech_bubble (말풍선)
+```
+
+---
+
+## 매일 작업 체크리스트 (디자인팀 전용)
+
+```
+1. 요청 접수 시 의도 파악 (단순 변경 vs 대규모 리뉴얼)
+2. 현재 상태 확인 (파일 읽기, 크기 확인)
+3. Pokemon 에셋에서 최적 소스 찾기 (위 좌표 가이드 참고)
+4. 추출 스크립트 작성 (Python/PIL)
+5. 적절한 이름으로 저장 (/assets/pokemon_furniture/)
+6. sprites.ts에 로드 코드 추가
+7. OfficeScene.ts에서 사용
+8. setOrigin, setDepth 명시 (특히 키큰 가구)
+9. 빌드 확인 (npx next build)
+10. ✅ 결과 보고 + 시각적 차이 설명
+```
+
+---
+
+## 캐릭터 스프라이트 품질 기준 (히스토리컬 — LimeZu v2.0 시기)
+
+> ⚠️ 이 섹션은 v2.0 LimeZu 시절 규격. 현재 v3.0은 Pokemon 32×48 4×4 시트 기준. 기존 char_0~3 레거시 에셋을 다룰 때만 참조.
+
+### (레거시) 프레임 규칙 (7열 × 6행, 16×32px)
 ```
 Row 0: 정면(DOWN) — idle col3 + walk row6 (9프레임)
 Row 1: 왼쪽(LEFT) — LimeZu 원본 row3 (24프레임)
@@ -118,33 +286,9 @@ Row 4: 앉기/타이핑 — sit 시트
 Row 5: 기타 — phone 시트
 ```
 
-### 절대 금지
-- **얼굴 겹침** — idle과 walk 프레임을 다른 방향에서 섞지 말 것. 한 row 안에서는 같은 방향의 소스만 사용
-- **16x16과 16x32 혼용** — 모든 캐릭터는 LimeZu 기반 16x32만 사용 (char_0~3)
-- **idle 애니메이션으로 방향 덮어쓰기** — 옆모습이면 `play('idle')` 호출 금지, 프레임 고정
-
-### LimeZu 원본 방향 매핑 (확인됨)
-```
-Idle row: col0=오른쪽, col1=뒤, col2=왼쪽, col3=정면
-Walk row 1: 뒤(UP)
-Walk row 2: 뒤 변형
-Walk row 3: 왼쪽(LEFT) — 얼굴 왼쪽 보임
-Walk row 4: 오른쪽(RIGHT)
-Walk row 6: 정면(DOWN) — 9프레임
-```
-
-### 검증 (변환 후 반드시)
-```bash
-# 각 row 첫 프레임 확대 확인
-python3 -c "
-from PIL import Image
-img = Image.open('ui/public/assets/char_0.png')
-for r in range(4):
-    frame = img.crop((0, r*32, 16, r*32+32))
-    frame.resize((64,128), Image.NEAREST).save(f'/tmp/check_row{r}.png')
-"
-```
-→ row0=정면, row1=왼쪽, row2=오른쪽, row3=뒤 맞는지 눈으로 확인
+### 원칙 (현재도 유효)
+- **얼굴 겹침 금지** — idle과 walk 프레임을 다른 방향에서 섞지 말 것
+- **idle 애니메이션으로 방향 덮어쓰기 금지** — 옆모습이면 `play('idle')` 호출 금지, 프레임 고정
 
 ---
 
@@ -219,11 +363,14 @@ for r in range(4):
 - [ ] 모바일/데스크탑 동일 기능?
 - [ ] 컴포넌트: `bg-[#1a1a2e] border border-[#2a2a4a] rounded` 패턴?
 
-### 픽셀아트 검수
-- [ ] 캐릭터 16x32px? 타일 16x16px?
+### 픽셀아트 검수 (v3.0 Pokemon 기준)
+- [ ] 캐릭터 128x192 (32×48 프레임, 4×4)? 타일 32×32px?
+- [ ] RGBA PNG 투명 배경?
 - [ ] 아웃라인: 검정 아닌 어두운 채도색?
-- [ ] 에셋 총 용량 3MB 이하?
-- [ ] 오리지널 에셋인가? (레퍼런스 직접 복사 아닌지)
+- [ ] Pokemon 추출 시 좌표 기록되어 있나? (재현 가능성)
+- [ ] sprites.ts 로드 키 컨벤션 일치?
+- [ ] setOrigin/setDepth 명시? (특히 키 큰 가구)
+- [ ] Z-order: monitor → desk → character 순 add?
 - [ ] 스프라이트시트 프레임 규칙 준수?
 
 ### 보고 형식
